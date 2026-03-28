@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPF Public Trustee Office fees</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5F2ED;
+    --surface: #FFFEF9;
+    --border: #D8D3C8;
+    --border-light: #EAE6DF;
+    --text-primary: #1A1814;
+    --text-secondary: #6B6660;
+    --text-muted: #A09B94;
+    --accent: #1A3A2A;
+    --accent-light: #2D5C40;
+    --accent-pale: #E8F0EB;
+    --highlight: #C8A85A;
+    --highlight-pale: #F7F0E0;
+    --active-row: #EEF4F0;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  /* Header */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent);
+    color: #FFFEF9;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+  }
+
+  .badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--highlight);
+    flex-shrink: 0;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.01em;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent-light);
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* Calculator section */
+  .calc-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .input-label {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    outline: none;
+    cursor: pointer;
+    border-radius: 0;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--surface);
+    box-shadow: 0 0 0 1px var(--accent);
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--surface);
+    box-shadow: 0 0 0 1px var(--accent);
+    cursor: pointer;
+  }
+
+  .slider-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    min-width: 110px;
+    text-align: right;
+  }
+
+  /* Metrics */
+  .metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border-light);
+    border: 1px solid var(--border-light);
+    margin-bottom: 2rem;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .metric {
+    background: var(--surface);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .metric-label {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .metric-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .metric-value.accent {
+    color: var(--accent-light);
+  }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  thead tr {
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0 12px 10px;
+    text-align: left;
+  }
+
+  th.r { text-align: right; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border-light);
+    transition: background 0.15s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody tr.active {
+    background: var(--active-row);
+  }
+
+  tbody tr.active td:first-child {
+    border-left: 2px solid var(--accent-light);
+  }
+
+  td {
+    padding: 10px 12px;
+    color: var(--text-secondary);
+    vertical-align: middle;
+  }
+
+  td.bracket-name { color: var(--text-primary); font-weight: 400; }
+  td.rate-cell {
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+  td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 13px; }
+  td.fee-cell { color: var(--text-primary); font-weight: 400; }
+
+  .bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bar-bg {
+    flex: 1;
+    height: 3px;
+    background: var(--border-light);
+    border-radius: 0;
+    min-width: 60px;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 0;
+    transition: width 0.3s ease;
+    min-width: 2px;
+  }
+
+  .bar-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    min-width: 36px;
+    text-align: right;
+  }
+
+  .tfoot-row td {
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  /* Footer note */
+  .note {
+    margin-top: 2rem;
+    padding: 1rem 1.25rem;
+    background: var(--highlight-pale);
+    border-left: 2px solid var(--highlight);
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .note strong {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 1rem;
+  }
+
+  .footer-left {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .footer-right {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 520px) {
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .metrics .metric:last-child { grid-column: 1 / -1; }
+    .page { padding: 2rem 1.25rem 4rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="badge">Singapore · CPF Board</div>
+    <h1>Public Trustee Office<br><em>Administration Fees</em></h1>
+    <p class="subtitle">Schedule of charges for estate administration under the Public Trustee Act. Rates effective as of 2025. Slide to calculate the total fee for any estate value.</p>
+  </header>
+
+  <div class="calc-section">
+    <span class="input-label">Estate value</span>
+    <div class="slider-row">
+      <input type="range" id="slider" min="5000" max="2000000" step="1000" value="300000">
+      <span class="slider-value" id="sliderVal">S$300,000</span>
+    </div>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-label">Total fee</div>
+        <div class="metric-value accent" id="totalFee">S$7,147.50</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Effective rate</div>
+        <div class="metric-value" id="effRate">2.38%</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Net to beneficiaries</div>
+        <div class="metric-value" id="netVal">S$292,852.50</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Bracket</th>
+            <th class="r">Rate</th>
+            <th class="r">Amount charged</th>
+            <th class="r">Fee</th>
+            <th>Share of total fee</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+        <tfoot>
+          <tr class="tfoot-row">
+            <td colspan="2">Total</td>
+            <td class="r" id="tfootEstate"></td>
+            <td class="r" id="tfootFee"></td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Note:</strong> The published schedule covers up to S$50,000 across five brackets. For estate values exceeding S$50,000, the final rate of <strong>2.25%</strong> is assumed to apply to all remaining amounts. Verify current rates with the Public Trustee's Office at <strong>pto.mlaw.gov.sg</strong> before relying on this calculator for legal or financial purposes.
+  </div>
+
+  <footer class="footer">
+    <div class="footer-left">
+      Public Trustee's Office · Ministry of Law, Singapore<br>
+      This calculator is for reference only and does not constitute legal or financial advice.
+    </div>
+    <div class="footer-right">AS OF 2025</div>
+  </footer>
+
+</div>
+
+<script>
+  const brackets = [
+    { label: 'First S$5,000',   limit: 5000,     rate: 0.065  },
+    { label: 'Next S$2,000',    limit: 2000,     rate: 0.06   },
+    { label: 'Next S$3,000',    limit: 3000,     rate: 0.0425 },
+    { label: 'Next S$10,000',   limit: 10000,    rate: 0.0275 },
+    { label: 'Next S$30,000',   limit: 30000,    rate: 0.0225 },
+    { label: 'Remainder',       limit: Infinity, rate: 0.0225 },
+  ];
+
+  function fmtSGD(n) {
+    return 'S$' + n.toLocaleString('en-SG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function fmtPct(n) {
+    return (n * 100).toFixed(2) + '%';
+  }
+
+  function calc(estate) {
+    let remaining = estate, total = 0;
+    const rows = [];
+    for (const b of brackets) {
+      if (remaining <= 0) break;
+      const chunk = Math.min(remaining, b.limit);
+      const fee = chunk * b.rate;
+      total += fee;
+      remaining -= chunk;
+      rows.push({ label: b.label, rate: b.rate, chunk, fee });
+    }
+    return { rows, total };
+  }
+
+  function render(estate) {
+    const { rows, total } = calc(estate);
+
+    document.getElementById('sliderVal').textContent = fmtSGD(estate);
+    document.getElementById('totalFee').textContent = fmtSGD(total);
+    document.getElementById('effRate').textContent = fmtPct(total / estate);
+    document.getElementById('netVal').textContent = fmtSGD(estate - total);
+    document.getElementById('tfootEstate').textContent = fmtSGD(estate);
+    document.getElementById('tfootFee').textContent = fmtSGD(total);
+
+    const tbody = document.getElementById('tbody');
+    const lastIdx = rows.length - 1;
+    tbody.innerHTML = rows.map((r, i) => {
+      const barPct = total > 0 ? (r.fee / total * 100) : 0;
+      const isActive = i === lastIdx;
+      return `<tr class="${isActive ? 'active' : ''}">
+        <td class="bracket-name">${r.label}</td>
+        <td class="rate-cell r">${fmtPct(r.rate)}</td>
+        <td class="r">${fmtSGD(r.chunk)}</td>
+        <td class="r fee-cell">${fmtSGD(r.fee)}</td>
+        <td>
+          <div class="bar-wrap">
+            <div class="bar-bg"><div class="bar-fill" style="width:${Math.max(barPct, 0.5).toFixed(1)}%"></div></div>
+            <span class="bar-pct">${barPct.toFixed(1)}%</span>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  const slider = document.getElementById('slider');
+  slider.addEventListener('input', e => render(+e.target.value));
+  render(300000);
+</script>
+</body>
+</html>
